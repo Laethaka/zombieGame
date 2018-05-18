@@ -17,38 +17,86 @@
 
 var inquirer = require('inquirer');
 var fileSys = require('fs');
-var username, playerClass, playerHealth, playerMana, mobName, mobHealth;
+var username, playerClass, playerHealth, playerMana, mobName, mobHealth, score, difficulty;
 
-var monsters = [
-    {
-        name: Goblin,
-        health: 5
-    }
-    {
-        name: Orc,
-        health: 
-    }
-]
+function gameInit() {
+    inquirer.prompt([
+        {
+            type: 'list',
+            message: 'Welcome back to the early 1990s!',
+            choices: ['Start Game', 'View High Scores'],
+            name: 'userChoice'
+        }
+    ])
+    .then(function (response) {
+        if (response.userChoice === 'Start Game') {
+            newGame();
+        } else {
+            showHighScores();
+        }
+    })
+}
 
-inquirer.prompt([
-    {
-        type: 'input',
-        message: "What's your name?",
-        name: 'username'
-    },
-    {
-        type: 'list',
-        message: 'What class of hero do you want to play?',
-        choices: [Barbarian, Thief, Wizard, Cleric],
-        name: 'class'
-    }
-])
-.then(function(inquirerResponse) {
-    username = inquirerResponse.username;
-    playerClass = inquirerResponse.class;
-    gamePlay();
-})
+function newGame() {
+    inquirer.prompt([
+        {
+            type: 'input',
+            message: "What's your name?",
+            name: 'username'
+        },
+        {
+            type: 'list',
+            message: 'Choose your character:',
+            choices: ['Beef McHardbody', 'Zixerion the Mysterious', 'The Derp Fox'],
+            name: 'class'
+        },
+        {
+            type: 'list',
+            message: 'Select difficulty:',
+            choices: ['Easy', 'Hard', 'Fuck me up fam'],
+            name: 'difficulty'
+        }
+    ])
+    .then(function(response) {
+        username = response.username;
+        playerClass = response.class;
+        console.log(`${response.username} the valiant ${response.class}, good luck on your quest!`)
+
+        switch(response.difficulty) {//SETTING DIFFICULTY VAR
+            case 'Easy':
+                difficulty = 0;
+                break;
+            case 'Hard':
+                difficulty = 0.25;
+                break;
+            case 'Fuck me up fam':
+                difficulty = 0.5;
+                break;
+        }
+        gamePlay();
+    })
+}
 
 function gamePlay() {
+    var mobId = Math.random() + difficulty;
+    switch (true) {//SETTING MONSTER
+        case(mobId > 1.5):
+            mobName = 'Warchief';
+            break;
+        case(mobId > 1.1):
+            mobName = 'Fimir';
+            break;
+        case(mobId > 0.8):
+            mobName = 'Orc';
+            break;
+        default: 
+            mobName = 'Goblin';
+            break;
+    }
 
+    inquirer.prompt([
+
+    ])
 }
+
+gameInit();
